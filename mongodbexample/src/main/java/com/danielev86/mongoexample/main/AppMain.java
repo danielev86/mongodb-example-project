@@ -12,7 +12,7 @@ public class AppMain {
 	public static void main(String[] args) {
 		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppMain.class);
 		MovieRepository movieRep = ctx.getBean(MovieRepository.class);
-		PrintInfoUtility.printMovieUtilities(movieRep.getAllMoviesByTitleAndYear());
+		PrintInfoUtility.printMovieUtilities(movieRep.retrieveMovieByRangeDate(1984, 1988));
 	}
 
 }
