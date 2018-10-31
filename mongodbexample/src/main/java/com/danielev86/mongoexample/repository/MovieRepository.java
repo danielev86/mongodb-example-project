@@ -73,6 +73,7 @@ public class MovieRepository extends GenericMongoRepository {
 				lstMovie.add(movieBean);
 			});
 		
+		closeConnection();
 		return lstMovie;
 		
 	}
