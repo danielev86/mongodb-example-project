@@ -6,12 +6,14 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.danielev86.mongoexample.bean.ActorBean;
 import com.danielev86.mongoexample.bean.MovieBean;
+import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -31,25 +33,30 @@ public class MovieRepository implements Serializable {
 		setDatabase(mongoClient.getDatabase("movies"));
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<MovieBean> getAllMovie() {
 		List<MovieBean> lstMovies = new ArrayList<>();
-
-		FindIterable<Document> documents = getDatabase().getCollection("movies").find();
-		for (Document document : documents) {
-
-			MovieBean movieBean = new MovieBean();
-			movieBean.setTitle((String) document.get("title"));
-			movieBean.setYear(((Double) document.get("year")).intValue());
-			List<ActorBean> lstActor = new ArrayList<>();
-			for (String actor : (List<String>) document.get("actors")) {
-				ActorBean actorBean = new ActorBean();
-				actorBean.setActor(actor);
-				lstActor.add(actorBean);
-			}
-			movieBean.setLstActor(lstActor);
-			lstMovies.add(movieBean);
-
-		}
+		
+		getDatabase().getCollection("movies")
+				.find()
+				.forEach( (Block<Document>) document ->{
+					MovieBean movieBean = new MovieBean();
+					movieBean.setTitle((String) document.get("title"));
+					movieBean.setYear( ((Double) document.get("year")).intValue() );
+					
+					List<ActorBean> lstActor = new ArrayList<>();
+					List<String> lstActorFullName = (List<String>) document.get("actors");
+					
+					if (CollectionUtils.isNotEmpty(lstActorFullName)) {
+						lstActorFullName.forEach(iter -> {
+							ActorBean actorBean = new ActorBean();
+							actorBean.setActor(iter);
+							lstActor.add(actorBean);
+						});
+					}
+					movieBean.setLstActor(lstActor);
+					lstMovies.add(movieBean);
+				});
 
 		mongoClient.close();
 		return lstMovies;
