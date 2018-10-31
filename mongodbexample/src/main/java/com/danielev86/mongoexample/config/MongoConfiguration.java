@@ -1,7 +1,5 @@
 package com.danielev86.mongoexample.config;
 
-import java.io.Serializable;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,7 +8,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
 @Configuration
-public class MongoConfiguration implements Serializable{
+public class MongoConfiguration {
 	
 	private static final long serialVersionUID = 1L;
 	

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -16,6 +17,9 @@ public class GenericMongoRepository implements Serializable {
 	@Autowired
 	private MongoClient mongoClient;
 
+	@Autowired
+	private ConversionService converter;
+
 	private MongoDatabase database;
 
 	public void initializeDbConfiguration(String dbName) {
@@ -25,7 +29,7 @@ public class GenericMongoRepository implements Serializable {
 	public MongoCollection<Document> getCollectionByName(String collectionName) {
 		return getDatabase().getCollection(collectionName);
 	}
-	
+
 	public void closeConnection() {
 		mongoClient.close();
 	}
@@ -45,7 +49,13 @@ public class GenericMongoRepository implements Serializable {
 	public void setDatabase(MongoDatabase database) {
 		this.database = database;
 	}
-	
-	
+
+	public ConversionService getConverter() {
+		return converter;
+	}
+
+	public void setConverter(ConversionService converter) {
+		this.converter = converter;
+	}
 
 }
