@@ -11,6 +11,8 @@ public class MovieBean implements Serializable {
 
 	private List<ActorBean> lstActor;
 
+	private List<DirectorBean> lstDirector;
+
 	private Integer year;
 
 	public String getTitle() {
@@ -35,6 +37,14 @@ public class MovieBean implements Serializable {
 
 	public void setYear(Integer year) {
 		this.year = year;
+	}
+
+	public List<DirectorBean> getLstDirector() {
+		return lstDirector;
+	}
+
+	public void setLstDirector(List<DirectorBean> lstDirector) {
+		this.lstDirector = lstDirector;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.danielev86.mongoexample.repository;
 import java.io.Serializable;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 
@@ -28,6 +29,26 @@ public class GenericMongoRepository implements Serializable {
 
 	public MongoCollection<Document> getCollectionByName(String collectionName) {
 		return getDatabase().getCollection(collectionName);
+	}
+	
+	public Long removeOneElement(Bson deleteQuery, String collectioName) {
+		
+		return getCollectionByName(collectioName)
+			.deleteOne(deleteQuery)
+			.getDeletedCount();
+	}
+	
+	public Long removeManyElement(Bson deleteQuery, String collectionName) {
+		
+		return getCollectionByName(collectionName)
+				.deleteMany(deleteQuery)
+				.getDeletedCount();
+		
+	}
+	
+	public void addElement(Document insertQuery, String collectionName) {
+		getCollectionByName(collectionName)
+			.insertOne(insertQuery);
 	}
 
 	public void closeConnection() {

@@ -15,7 +15,7 @@ public class PrintInfoUtility {
 			System.out.println("actor: ");
 			int i = 1;
 			for (ActorBean actor : movie.getLstActor()) {
-				System.out.println("   "+ i + ") " +actor.getActor());
+				System.out.println("   "+ i + ") " +actor.getFirstName() + " " +actor.getLastName());
 				i++;
 			}
 		}

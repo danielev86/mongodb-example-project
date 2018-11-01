@@ -10,20 +10,21 @@ import org.springframework.core.convert.converter.Converter;
 import com.danielev86.mongoexample.bean.ActorBean;
 import com.danielev86.mongoexample.bean.MovieBean;
 
-public class MovieConverter implements Converter<Document, MovieBean> {
+public class DocumentToMovieConverter implements Converter<Document, MovieBean> {
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public MovieBean convert(Document document) {
 		MovieBean movieBean = new MovieBean();
 		movieBean.setTitle( (String) document.get("title"));
-		movieBean.setYear( ((Double) document.get("year")).intValue() );
-		List<String> lstActorFullname = (List<String>) document.get("actors");
+		movieBean.setYear( (Integer) document.get("year") );
+		List<Document> lstActorFullname = (List<Document>) document.get("actors");
 		List<ActorBean> lstActor = new ArrayList<>();
 		if( CollectionUtils.isNotEmpty(lstActorFullname) ) {
 			lstActorFullname.forEach(iter -> {
 				ActorBean actorBean = new ActorBean();
-				actorBean.setActor(iter);
+				actorBean.setFirstName((String) iter.get("firstName"));
+				actorBean.setLastName( (String) iter.get("lastName") );
 				lstActor.add(actorBean);
 			});
 		}

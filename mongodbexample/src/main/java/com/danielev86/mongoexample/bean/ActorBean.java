@@ -1,8 +1,6 @@
 package com.danielev86.mongoexample.bean;
 
-import java.io.Serializable;
-
-public class ActorBean implements Serializable {
+public class ActorBean extends PersonBean {
 
 	private static final long serialVersionUID = 1L;
 

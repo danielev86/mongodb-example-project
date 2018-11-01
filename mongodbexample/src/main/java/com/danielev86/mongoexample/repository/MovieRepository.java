@@ -10,6 +10,7 @@ import org.bson.conversions.Bson;
 import org.springframework.stereotype.Repository;
 
 import com.danielev86.mongoexample.bean.MovieBean;
+import com.danielev86.mongoexample.exception.NumberElementException;
 import com.mongodb.Block;
 import com.mongodb.client.model.Filters;
 
@@ -36,7 +37,6 @@ public class MovieRepository extends GenericMongoRepository {
 			lstMovies.add(movieBean);
 		});
 
-		closeConnection();
 		return lstMovies;
 	}
 	
@@ -55,7 +55,6 @@ public class MovieRepository extends GenericMongoRepository {
 				lstMovie.add(movieBean);
 			});
 		
-		closeConnection();
 		return lstMovie;
 	}
 	
@@ -75,7 +74,6 @@ public class MovieRepository extends GenericMongoRepository {
 				lstMovie.add(movieBean);
 			});
 		
-		closeConnection();
 		return lstMovie;
 		
 	}
@@ -95,6 +93,12 @@ public class MovieRepository extends GenericMongoRepository {
 			});
 		
 		return lstMovie;
+	}
+	
+	public Long retrieveNumOfMovieByTitle(String title) {
+		Bson documentFilter = Filters.eq("title", title);
+		return  getCollectionByName(DB_COLLECTION_NAME)
+			.countDocuments(documentFilter);
 	}
 	
 	public List<MovieBean> retrieveMovieByRangeDate(Integer yearFrom, Integer yearTo){
@@ -120,6 +124,22 @@ public class MovieRepository extends GenericMongoRepository {
 			});
 		
 		return lstMovies;
+	}
+	
+	public void deleteMovie(String fieldParameter, Object obj) {
+		Bson deleteQuery = Filters.eq(fieldParameter, obj);
+		Long numberRemoveElement = removeOneElement(deleteQuery, DB_COLLECTION_NAME);
+		System.out.println("Number element remove: " +numberRemoveElement);
+	}
+	
+	public void addMovie(MovieBean movieBean) throws NumberElementException {
+		
+		if (retrieveNumOfMovieByTitle(movieBean.getTitle()) > 0) {
+			throw new NumberElementException("There is one element with this title!!!");
+		}else {
+			Document movieDoc = getConverter().convert(movieBean, Document.class);
+			addElement(movieDoc, DB_COLLECTION_NAME);
+		}
 	}
 
 }
