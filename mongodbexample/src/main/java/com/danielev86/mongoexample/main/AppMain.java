@@ -17,7 +17,7 @@ public class AppMain {
 	public static void main(String[] args) throws NumberElementException {
 		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppMain.class);
 		MovieRepository movieRep = ctx.getBean(MovieRepository.class);
-		movieRep.addMovie(mockMovieBean());
+		//movieRep.addMovie(mockMovieBean());
 		PrintInfoUtility.printMovieUtilities(movieRep.retrieveAllMovie());
 	}
 	
